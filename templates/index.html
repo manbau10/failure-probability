@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>Failure Probability Model</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+
+</head>
+
+
+</head>
+
+<body>
+ <div class="login">
+	<h1>Prediction of Water Pipe Failure Probability</h1>
+
+	<h2>Pipe-related factors</h2>
+
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('predict')}}"method="post">
+    	<input type="text" name="Length" placeholder="Length" required="required" />
+        <input type="text" name="Diameter" placeholder="Diameter" required="required" />
+		<input type="text" name="Age" placeholder="Age" required="required" />
+		<!-- Replace input fields for dummy variables with dropdown menus for categorical variables -->
+		<br>
+		<h2></h2>
+		<label for="material"><strong>Material:</strong></label>
+		<select name="Material" id="material" class="input-variable">
+		  <option value="AC">AC</option>
+		  <option value="CI">CI</option>
+		  <option value="DI">DI</option>
+		  <option value="GI">GI</option>
+		  <option value="GIL">GIL</option>
+		  <option value="PE">PE</option>
+		  <option value="SS">SS</option>
+		  <option value="Steel">Steel</option>
+		  <option value="UPVC">UPVC</option>
+		</select>
+		<br>
+
+	<h2>Environment-related factors</h2>
+	<input type="text" name="AADT" placeholder="AADT" required="required" />
+		<input type="text" name="Temperature" placeholder="Temperature" required="required" />
+		<input type="text" name="Humidity" placeholder="Humidity" required="required" />
+		<input type="text" name="Precipitation" placeholder="Precipitation" required="required" />
+		<br>
+	<h2></h2>
+		<label for="corrosivity"><strong>Corrosivity:</strong></label>
+		<select name="Corrosivity" id="corrosivity" class="input-variable">
+		  <option value="Highly-corrosive">Highly-corrosive</option>
+		  <option value="Mildly Corrosive">Mildly Corrosive</option>
+		  <option value="Non-corrosive">Non-corrosive</option>
+		</select>
+		<br>
+	<h2></h2>
+
+		<label for="road_type"><strong>Road type:</strong></label>
+		<select name="Road_type" id="road_type" class="input-variable">
+		  <option value="CARRIAGEWAY">CARRIAGEWAY</option>
+		  <option value="FOOTWAY">FOOTWAY</option>
+		  <option value="Other Location">Other Location</option>
+		</select>
+		<br>
+	<h2></h2>
+		<label for="landuse"><strong>Land use:</strong></label>
+		<select name="Landuse" id="landuse" class="input-variable">
+		  <option value="RURAL">RURAL</option>
+		  <option value="SEA">SEA</option>
+		  <option value="URBAN">URBAN</option>
+		  <option value="WATERBODY">WATERBODY</option>
+		</select>
+
+	<h2>Operation-related factors</h2>
+		<input type="text" name="CP" placeholder="CP" required="required" />
+		<input type="text" name="Pressure" placeholder="Pressure" required="required" />
+		<button type="submit" id="submit">Predict</button>
+
+
+
+    </form>
+    <div class="prediction-text">
+      <span>{{ prediction_text }}</span>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+
+
+
+
+body {
+  background: linear-gradient(to right, #2980b9, #8e44ad);
+}
+.input-variable {
+  font-weight: bold;
+}
+.login {
+  width: 800px; /* Set a fixed width for the element */
+  margin: auto; /* Center the element horizontally */
+  display: block; /* Make the element a block-level element */
+}
+
+
+h1 {
+  color: white;
+}
+
+h2 {
+  color: orange;
+}
+
+h3 {
+  color: blue;
+}
+
+h4 {
+  color: purple;
+}
+button {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+button.btn1 {
+  background-color: green;
+}
+
+button.btn2 {
+  background-color: red;
+}
+
+button.btn3 {
+  background-color: purple;
+}
+
+button.btn4 {
+  background-color: yellow;
+}
+
