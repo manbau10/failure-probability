@@ -3,7 +3,7 @@ from flask import Flask, request, render_template
 import pickle
 
 # Create flask app
-flask_app = Flask(__name__, static_folder='static')
+app = Flask(__name__, static_folder='static')
 
 model = pickle.load(open("model.pkl", "rb"))
 
@@ -32,11 +32,11 @@ dummy_variables = {
     'Landuse': ['Landuse_RURAL', 'Landuse_SEA', 'Landuse_URBAN', 'Landuse_WATERBODY']
 }
 
-@flask_app.route("/")
+@app.route("/")
 def Home():
     return render_template("index.html")
 
-@flask_app.route("/predict", methods = ["POST"])
+@app.route("/predict", methods = ["POST"])
 def predict():
     # Convert form data to dictionary
     form_data = {key: request.form.get(key) for key in variables}
@@ -72,4 +72,4 @@ def predict():
 
 
 if __name__ == "__main__":
-    flask_app.run(debug=True)
+    app.run(debug=True)
