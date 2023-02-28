@@ -13,6 +13,11 @@
 
 </head>
 
+<style>
+  .prediction-text {
+    font-size: 24px;
+  }
+</style>
 
 </head>
 
@@ -23,69 +28,101 @@
 	<h2>Pipe-related factors</h2>
 
      <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict')}}"method="post">
-    	<input type="text" name="Length" placeholder="Length" required="required" />
-        <input type="text" name="Diameter" placeholder="Diameter" required="required" />
-		<input type="text" name="Age" placeholder="Age" required="required" />
+    <form action="{{ url_for('predict')}} "method="post">
+    <div class="form-input">
+        <label for="Length"><b>Length (m):</b></label>
+        <input type="text" name="Length" id="Length" required="required" value={{ length }} />
+    </div>
+		<h2></h2>
+    <div class="form-input">
+        <label for="Diameter"><b>Diameter (mm):</b></label>
+        <input type="text" name="Diameter" id="Diameter" required="required" value={{ diameter }} />
+    </div>
+		<h2></h2>
+    <div class="form-input">
+        <label for="Age"><b>Age (years):</b></label>
+        <input type="text" name="Age" id="Age" required="required" value={{ age }} />
+    </div>
+
 		<!-- Replace input fields for dummy variables with dropdown menus for categorical variables -->
 		<br>
 		<h2></h2>
 		<label for="material"><strong>Material:</strong></label>
 		<select name="Material" id="material" class="input-variable">
-		  <option value="AC">AC</option>
-		  <option value="CI">CI</option>
-		  <option value="DI">DI</option>
-		  <option value="GI">GI</option>
-		  <option value="GIL">GIL</option>
-		  <option value="PE">PE</option>
-		  <option value="SS">SS</option>
-		  <option value="Steel">Steel</option>
-		  <option value="UPVC">UPVC</option>
+		  <option value="Material_AC">AC</option>
+		  <option value="Material_CI">CI</option>
+		  <option value="Material_DI">DI</option>
+		  <option value="Material_GI">GI</option>
+		  <option value="Material_GIL">GIL</option>
+		  <option value="Material_PE">PE</option>
+		  <option value="Material_S">S</option>
+		  <option value="Material_SS">SS</option>
+
 		</select>
 		<br>
 
 	<h2>Environment-related factors</h2>
-	<input type="text" name="AADT" placeholder="AADT" required="required" />
-		<input type="text" name="Temperature" placeholder="Temperature" required="required" />
-		<input type="text" name="Humidity" placeholder="Humidity" required="required" />
-		<input type="text" name="Precipitation" placeholder="Precipitation" required="required" />
-		<br>
+	<label for="AADT"><b>Traffic (AADT):</b></label>
+	<input type="text" name="AADT" id="AADT" required="required" value={{ traffic }} />
+	<label for="Temperature"><b>Temperature (oC):</b></label>
+	<input type="text" name="Temperature" id="Temperature" required="required" value={{ temperature }} />
+		<h2></h2>
+	<label for="Humidity"><b>Humidity (%):</b></label>
+	<input type="text" name="Humidity" id="Humidity" required="required" value={{ humidity }} />
+	<label for="Precipitation"><b>Precipitation (mm):</b></label>
+	<input type="text" name="Precipitation" id="Precipitation" required="required" value={{ precipitation }} />
+	<br>
 	<h2></h2>
 		<label for="corrosivity"><strong>Corrosivity:</strong></label>
 		<select name="Corrosivity" id="corrosivity" class="input-variable">
-		  <option value="Highly-corrosive">Highly-corrosive</option>
-		  <option value="Mildly Corrosive">Mildly Corrosive</option>
-		  <option value="Non-corrosive">Non-corrosive</option>
+		  <option value="Corrosivity_Highly corrosive">Highly corrosive</option>
+		  <option value="Corrosivity_Mildly corrosive">Mildly corrosive</option>
+		  <option value="Corrosivity_Non corrosive">Non corrosive</option>
 		</select>
 		<br>
 	<h2></h2>
 
 		<label for="road_type"><strong>Road type:</strong></label>
 		<select name="Road_type" id="road_type" class="input-variable">
-		  <option value="CARRIAGEWAY">CARRIAGEWAY</option>
-		  <option value="FOOTWAY">FOOTWAY</option>
-		  <option value="Other Location">Other Location</option>
+		  <option value="Road_type_Carriageway">Carriageway</option>
+		  <option value="Road_type_Footway">Footway</option>
+		  <option value="Road_type_Other location">Other location</option>
 		</select>
 		<br>
 	<h2></h2>
 		<label for="landuse"><strong>Land use:</strong></label>
 		<select name="Landuse" id="landuse" class="input-variable">
-		  <option value="RURAL">RURAL</option>
-		  <option value="SEA">SEA</option>
-		  <option value="URBAN">URBAN</option>
-		  <option value="WATERBODY">WATERBODY</option>
+		  <option value="Landuse_Rural">Rural</option>
+		  <option value="Landuse_Sea">Sea</option>
+		  <option value="Landuse_Urban">Urban</option>
+		  <option value="Landuse_Waterbody">Waterbody</option>
 		</select>
 
 	<h2>Operation-related factors</h2>
-		<input type="text" name="CP" placeholder="CP" required="required" />
-		<input type="text" name="Pressure" placeholder="Pressure" required="required" />
+		<label for="Pressure"><b>Pressure (bar):</b></label>
+	<input type="text" name="Pressure" id="Pressure" required="required" value={{ pressure }} />
+		<h2></h2>
+		<br>
+		<label for="cathodic_protection"><strong>Cathodic Protection:</strong></label>
+		<select name="Cathodic Protection" id="cathodic_protection" class="input-variable" >
+		  <option value="No">No</option>
+		  <option value="Yes">Yes</option>
+
+		</select>
+		<br>
+	<h2></h2>
+
+
 		<button type="submit" id="submit">Predict</button>
 
 
 
     </form>
     <div class="prediction-text">
+
+	<h2></h2>
       <span>{{ prediction_text }}</span>
+	<h2></h2>
     </div>
 </div>
 
