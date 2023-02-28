@@ -1,14 +1,16 @@
 import numpy as np
 from flask import Flask, request, render_template
 import pickle
+import  copy
 
 # Create flask app
 app = Flask(__name__, static_folder='static')
 
+
 model = pickle.load(open("model.pkl", "rb"))
 
-# List of variables for the model
-variables = [
+
+gui_variables = [
     'CP',
     'Length',
     'Diameter',
@@ -26,48 +28,68 @@ variables = [
 
 # Map of categorical variable names to dummy variable names
 dummy_variables = {
-    'Material': ['Material_AC', 'Material_CI', 'Material_DI', 'Material_GI', 'Material_GIL', 'Material_PE', 'Material_SS', 'Material_Steel', 'Material_UPVC'],
-    'Corrosivity': ['Corrosivity_Highly-corrosive', 'Corrosivity_Mildly Corrosive', 'Corrosivity_Non-corrosive'],
-    'Road_type': ['Road_type_CARRIAGEWAY', 'Road_type_FOOTWAY', 'Road_type_Other Location'],
-    'Landuse': ['Landuse_RURAL', 'Landuse_SEA', 'Landuse_URBAN', 'Landuse_WATERBODY']
+    'Material': ['Material_AC', 'Material_CI', 'Material_DI', 'Material_GI', 'Material_GIL', 'Material_PE', 'Material_S', 'Material_SS'],
+    'Corrosivity': ['Corrosivity_Highly corrosive','Corrosivity_Mildly corrosive', 'Corrosivity_Non corrosive'],
+    'Road_type': ['Road_type_Carriageway', 'Road_type_Footway', 'Road_type_Other location'],
+    'Landuse': ['Landuse_Rural', 'Landuse_Sea','Landuse_Urban', 'Landuse_Waterbody']
 }
 
+
 @app.route("/")
-def Home():
+def home():
     return render_template("index.html")
 
-@app.route("/predict", methods = ["POST"])
+
+@app.route("/predict", methods=["GET", "POST"])
 def predict():
-    # Convert form data to dictionary
-    form_data = {key: request.form.get(key) for key in variables}
 
-    # Convert numerical variables to floats
-    for key in ['CP', 'Length', 'Diameter', 'Pressure', 'Age', 'AADT', 'Temperature', 'Humidity', 'Precipitation']:
-        form_data[key] = float(form_data[key])
-
-    # Convert categorical variables to dummy variables
-    for key in dummy_variables:
-        form_data[key] = 1 if request.form.get(key) == '1' else 0
-        for dummy_var in dummy_variables[key]:
-            form_data[dummy_var] = 1 if request.form.get(dummy_var) == '1' else 0
-
-    # Make sure the input data has the correct number of features
     input_data = []
-    for var in variables:
-        if var in dummy_variables:
-            input_data += [form_data[dummy_var] for dummy_var in dummy_variables[var]]
-        else:
-            input_data.append(form_data[var])
+    for key in gui_variables:
+        val = request.form.get(key)
+        print(key, val)
+        if key == "CP":
+            if val == "Yes":
+                input_data.append(1)
+            else:
+                input_data.append(0)
+        elif key in dummy_variables.keys():
+            tmp = dummy_variables.get(key)
 
-    # Predict using the model
+            input_data.extend(
+                (np.array(tmp) == val).astype(np.uint8)
+            )
+
+        else:
+            input_data.append(
+                float(val)
+            )
+    print("input_data:\n", input_data)
+    #print("test: ", request.form.get("test1"))
+    print(list(request.form.keys()))
+
     prediction = model.predict_proba([input_data])
     output = np.round(prediction[0], 2)
 
+    # retained_dic = copy.deepcopy(request.form)
+    # prediction_text="The reliability and failure probability of the pipe are {}".format(output),
+
+
     return render_template("index.html",
-                           prediction_text="The reliablity and failure probability of the pipe are {}".format(output))
-                            # prediction_text = "".format(output))
+                           # context=[prediction_text],
+                           # context=retained_dic,
+                           # form=form
+                           prediction_text="The reliability and failure probability of the pipe are {}".format(output),
+                           pressure=request.form.get("Pressure"),
+                           cp=request.form.get("Cathodic Protection"),
+                           length=request.form.get("Length"),
+                           diameter=request.form.get("Diameter"),
+                           age=request.form.get("Age"),
+                           traffic=request.form.get("AADT"),
+                           temperature=request.form.get("Temperature"),
+                           humidity=request.form.get("Humidity"),
+                           precipitation=request.form.get("Precipitation"),
 
-
+                           )
 
 
 
