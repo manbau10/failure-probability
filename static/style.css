@@ -58,4 +58,7 @@ button.btn3 {
 button.btn4 {
   background-color: yellow;
 }
+.prediction-text span {
+  color: white;
+}
 
